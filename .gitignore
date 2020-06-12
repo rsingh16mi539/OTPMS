@@ -1,0 +1,7 @@
+venv
+*.pyc
+.env
+/myprojectenv/*
+nohup.*
+*.db
+settings.py

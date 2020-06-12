@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+  <title>Students</title>
+  <meta charset="utf-8">
+  <meta name="description" content="PICT Training and placement online portal">
+<meta name="keywords" content="PICT, pict, tnp, tpo, training, and , placement">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!---- BootStrap Libraries         -->
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+      <link rel="stylesheet" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
+
+  <script src="/static/js/bootstrap.min.js"></script>
+  <script src="/static/js/check.js"></script>
+  
+  
+   <!---- BootStrap online Libraries        
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+   -->
+ <style>
+ 
+    /* Remove the navbar's default margin-bottom and rounded borders */ 
+    .navbar {
+      margin-bottom: 0;
+      border-radius: 0;
+      background-color:#101B2D;
+      font-family: Georgia, Times, "Times New Roman", serif;
+    }
+    .navbar1 {
+      margin-bottom: 0;
+      border-radius: 0;
+
+      font-family: Georgia, Times, "Times New Roman", serif;
+    }
+    /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+    .row.content {height: 450px}
+    
+    /* Set gray background color and 100% height */
+    .sidenav {
+      padding-top: 20px;
+      background-color: #f1f1f1;
+      height: 150%;
+    }
+    
+    /* Set black background color, white text and some padding */
+    footer {
+      background-color: #353739;
+    font-size:15px;
+      color: #b3b3b1;
+      padding: 15px;
+      font-family: Georgia, Times, "Times New Roman", serif;
+    }
+    body {
+    font-family: Georgia, Times, "Times New Roman", serif;
+    }
+  footer a:hover
+  {
+  text-decoration:none;
+  color:white;
+  }
+    
+    /* On small screens, set height to 'auto' for sidenav and grid */
+    @media screen and (max-width: 767px) {
+      .sidenav {
+        height: auto;
+        padding: 15px;
+      }
+      .row.content {height:auto;} 
+    }
+  </style>
+  </head>
+<body>
+
+
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+<h1 class="text-center"> 
+<a class="pull-left" href="/"> 
+<img class="img-responsive" style="vertical-align: bottom;" src="/static/pict_logo.png" alt="pict logo"/>
+</a><span style="margin-left: -20%; color: rgb(222, 222, 222);">Training and Placement</span></h1>  
+
+
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav" style="margin-left:15.5%;">
+        <li><a href="/">Home</a></li>
+             {% if login == 2 %}
+               <li><a href="/opportunities/">Opportunities</a></li>
+        {% endif %}        
+    
+    <li><a href="/companies/">Companies</a></li>
+    <li><a href="/notifications/">Notifications</a></li>
+     <li><a href="/results/">Results</a></li>
+
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+      
+    <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{name}} <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+
+            {% if login == 2 %}
+                {% if not lock %}
+                <!-- <li><a href="/peditprofile/">Update Profile</a></li> -->
+                {% endif %}
+
+                {% if update_marks != 0 %}
+                <!-- <li><a href="/pupdatemarks/">Update Marks</a></li> -->
+                {% endif %}
+
+                <li><a href="/pstudentdownload/">Download Profile</a></li>
+                <li><a href="/psettings/">Settings</a></li>
+            {% endif %}
+                {% if login == 1 %}
+                    <li><a href="/manage/">Manage</a></li>
+                {% endif %}
+               <li><a href="/logout/">Logout</a></li>
+           
+          </ul>
+        </li>
+    
+     </ul>
+    </div>
+  </div>
+</nav>
+  
+
+<div class="container-fluid ">    
+  <div class="row content">
+    <div class="col-sm-2 sidenav ">
+    
+ <div class="navbar1"  >
+      <ul class="nav navbar-nav" >
+    <br><br>
+      <li><a href="/pregister/"><b>Register  Company</b></a></li>
+      <li><a href="/pedit/"><b>Edit Company</b></a> </li>
+
+      <li><a href="/pnotify/"><b>Notify Student</b></a> </li>
+      <li><a href="/presult/"><b>Upload Result</b></a> </li>
+      <li ><a href="/students/"><b>Students List</b></a></li>
+      <li><a href="/appliedstudents/"><b>Applied Students</b></a> </li>
+     <!-- <li><a href="/psearch/"><b>Search Student</b></a> </li> -->
+
+
+    </ul>
+    </div>
+    </div>
+
+    <div id="ajaxreplace" name="ajaxreplace" class="col-sm-8 ">
+ <h2 class="text-center">
+ 
+      <b>Students</b> </h2>
+   <!-- Division for filters -->
+   <div style="display: none;">
+
+<form class="form-horizontal" id="student" method="POST" action ='/students/'>
+    {% csrf_token %}
+
+  <div class="form-group">
+
+  <div style="text-align:left;" class="col-sm-2 control-label"><b >Course</b></div>
+  <div class="col-sm-2 text-left" ><label class="control-label" >Year</label></div>
+  <div class="col-sm-2 text-left"><label class="control-label" >Branch</label></div>
+  <div class="col-sm-2 text-left" style="padding-left:2px;"><label class="control-label" >Average</label></div>
+  <div class="col-sm-2 text-left" style="padding-left:15px;"><label class="control-label" >Status</label></div>
+  </div>
+  
+  <div class="form-group">
+  <div class="col-sm-2">	
+	 <div class="input-group">
+      <div class="input-group-btn">
+        <select  class="form-control" name="course" id="course">
+    <!--<option selected disabled hidden>Branch</option>-->
+            {% if course == "All" %}
+            <option value= "All" selected="selected" >All</option>
+            {% else %}
+            <option value= "All" >All</option>
+            {% endif %}
+
+            {% if course == "BE" %}
+            <option value = "BE" selected="selected"> BE </option>
+            {% else %}
+            <option value = "BE" > BE </option>
+            {% endif %}
+
+            {% if course == "ME" %}
+            <option value = "ME" selected="selected"> ME </option>
+            {% else %}
+            <option value = "ME"> ME </option>
+            {% endif %}
+
+        </select>
+		</div>
+	</div>
+  </div>
+  
+  
+  <div class="col-sm-2 text-right">
+    <div class="input-group">
+      <div class="input-group-btn">
+        <select style="width:100px" class="form-control" name="year" id="year">
+    <!--<option selected disabled hidden>Year</option>-->
+            <option value= "All"  selected="selected">All</option>
+           {% for passyear in years %}
+            {% if passyear.year == year %}
+            <option value = {{passyear.year}} selected="selected" > {{passyear.year}} </option>
+            {%  else %}
+            <option value = {{passyear.year}} > {{passyear.year}} </option>
+            {% endif %}
+            {% endfor %}
+      </select>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="col-sm-2 text-right" >
+    <div class="input-group">
+      <div class="input-group-btn">
+        <select style="width:85px" class="form-control" name="branch" id="branch">
+    <!--<option selected disabled hidden>Branch</option>-->
+            <option value= "All" selected="selected" >All</option>
+
+            {%  if branch == "Comp" %}
+            <option value = "Comp" selected="selected"> Comp </option>
+            {% else %}
+            <option value = "Comp" > Comp </option>
+            {% endif %}
+
+            {%  if branch == "IT" %}
+            <option value = "IT" selected="selected"> IT </option>
+            {% else %}
+            <option value = "IT" > IT </option>
+            {% endif %}
+
+            {% if branch == "EnTC" %}
+            <option value = "EnTC" selected="selected"> Entc </option>
+            {% else %}
+            <option value = "EnTC" > Entc </option>
+            {% endif %}
+      </select>
+
+      </div>
+    </div>
+  </div>
+
+<div >
+ 
+
+     <div class="col-sm-1" style="padding-right:2px;padding-left:2px;" >
+     <input type="number" name="minavg" placeholder="Min" id="minavg" value={{minavg}} class="form-control" style = "float:left;">
+     </div>
+
+     <div class="col-sm-1" style="padding-right:2px;padding-left:2px;">
+     <input type="number" name="maxavg" placeholder="Max" id="maxavg" value={{maxavg}} style = "float:left;" class="form-control">
+     </div>
+
+ 
+</div>
+
+
+<div class="col-sm-2 text-right" >
+    <div class="input-group">
+      <div class="input-group-btn">
+        <select style="width:105px" class="form-control" name="lock" id="lock">
+    <!--<option selected disabled hidden>Branch</option>-->
+            <option value= "All" selected="selected" >All</option>
+            
+            {% if lock  == "locked" %}
+            <option value = "locked" selected="selected" > Locked </option>
+            {% else %}
+            <option value = "locked"> Locked </option>
+            {% endif %}
+
+            {% if lock == "unlocked" %}
+            <option value = "unlocked" selected="selected" > Unlocked </option>
+            {% else %}
+            <option value = "unlocked" > Unlocked </option>
+            {% endif %}
+      
+      </select>
+
+      </div>
+    </div>
+  </div>
+
+  <!--<div class="col-sm-3 text-right" >-->
+    <!--<div class="input-group">-->
+      <!--<div class="input-group-btn">-->
+        <!--<select  class="form-control" name="company" id="company">-->
+    <!--&lt;!&ndash;<option selected disabled hidden>Company</option>&ndash;&gt;-->
+        <!--<option value="All" selected="selected" >"All</option>-->
+
+           <!--{% for company in companies %}-->
+            <!--<option value = {{company.name}} > {{company.name}} </option>-->
+            <!--{% endfor %}-->
+
+      <!--</select>-->
+
+      <!--</div>-->
+    <!--</div>-->
+  <!--</div>-->
+
+  <div class="col-sm-2"> <input type="submit" value ="Submit" class="btn btn-info form-control" ></div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+  </div>
+    </form>
+  </div>
+
+
+<div style="margin-bottom:20px"></div>
+<hr>
+<!-- <p>Table contains placement statistics for the year 2016-17. </p> -->
+  <div class="table-responsive">          
+  <table class="table" id="myTable">
+
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>College ID</th> 
+        <th>Name</th>
+        <th>Branch</th>
+        <!-- <th>Average</th> -->
+        <th>Resume</th>
+        <th>Company</th>   
+      </tr>
+    </thead>
+    <tbody>
+{% for student in students %}
+      <tr>
+        <td>{{forloop.counter}}</td>
+          <td>{{student.college_id}}</td>
+        
+        <td> <a href= /student/{{student.roll}}/ > {{student.name}}</a> </td>
+        <td>&nbsp;{{student.branch}}</td>
+        <!-- <td>&nbsp;&nbsp;{{student.average}}</td> -->
+        <td><a href= {{student.url}}> {{student.url}}</a></td>
+        <td></td>
+      
+      </tr>
+      {% endfor %}
+      
+    </tbody>
+  </table>
+  </div>
+        <br><br>
+      <div  class=" col-sm-2 col-md-offset-9"> <button value="Download file" onclick="downloadStudents()" class="btn btn-info form-control">Download</button>
+ </div>
+    </div>
+
+    <div class="col-sm-2 sidenav">
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<script>
+    $(document).ready(function(){
+    $('#myTable').DataTable({
+    "Average": [
+        { "sType": "numeric" }
+    ]
+} );
+});
+
+function downloadStudents() {
+        var csrftoken = getCookie('csrftoken');
+        var year = document.getElementById("year").value;
+        var branch = document.getElementById("branch").value;
+        var minavg = document.getElementById("minavg").value;
+        var maxavg = document.getElementById("maxavg").value;
+        var json =  { year :year , branch :branch , minavg:minavg,maxavg:maxavg,csrfmiddlewaretoken:csrftoken};
+        console.log(json);
+
+         $.ajax({
+            type: "POST",
+            url: '/downloadstudents/',
+            data:  json ,
+            success: function(message) {
+            console.log(message);
+            var hiddenElement = document.createElement('a');
+                hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(message);
+                hiddenElement.target = '_blank';
+                hiddenElement.download = year + "_" + branch + "_" + minavg +  "_" + maxavg + '.csv';
+                hiddenElement.click();
+
+            },
+        });
+ }
+
+</script>
+</body>
+</html>
+

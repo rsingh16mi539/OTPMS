@@ -1,0 +1,194 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Training and Placement</title>
+  <meta charset="utf-8">
+  <meta name="description" content="PICT Training and placement online portal">
+<meta name="keywords" content="PICT, pict, tnp, tpo, training, and , placement">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!---- BootStrap Libraries         -->
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+  <script src="/static/js/jquery.min.js"></script>
+  <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/check.js"></script>
+
+   <!---- BootStrap online Libraries        
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+   -->
+ <style>
+ 
+    /* Remove the navbar's default margin-bottom and rounded borders */ 
+    .navbar {
+      margin-bottom: 0;
+      border-radius: 0;
+      background-color:#101B2D;
+      font-family: Georgia, Times, "Times New Roman", serif;
+    }
+     .navbar1 {
+      margin-bottom: 0;
+      border-radius: 0;
+
+      font-family: Georgia, Times, "Times New Roman", serif;
+    }
+    
+    /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+    .row.content {height: 450px}
+    
+    /* Set gray background color and 100% height */
+    .sidenav {
+      padding-top: 20px;
+      background-color: #f1f1f1;
+      height: 120%;
+    }
+    
+    /* Set black background color, white text and some padding */
+    footer {
+   background-color: #353739;
+    font-size:15px;
+      color: #b3b3b1;
+      padding: 15px;
+    position:fixed;
+    height:50px;
+      bottom:0px;
+      left:0px;
+      right:0px;
+      margin-bottom:0px;
+    }
+  footer a:hover
+  {
+  text-decoration:none;
+  color:white;
+    font-family: Georgia, Times, "Times New Roman", serif;
+  }
+    /* On small screens, set height to 'auto' for sidenav and grid */
+    @media screen and (max-width: 767px) {
+      .sidenav {
+        height: auto;
+        padding: 15px;
+      }
+      .row.content {height:auto;} 
+    body{
+      font-family: Georgia, Times, "Times New Roman", serif;
+      }
+
+    }
+  </style>
+  </head>
+<body>
+
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+<h1 class="text-center"> 
+<a class="pull-left" href="/"> 
+<img class="img-responsive" style="vertical-align: bottom;" src="/static/pict_logo.png" alt="pict logo"/>
+</a><span style="margin-left: -20%; color: rgb(222, 222, 222);">Training and Placement</span></h1>  
+
+
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      
+    </div>
+      
+  
+    </div>
+  <br>
+  </div>
+</nav>
+  
+<div class="container-fluid ">    
+  <div class="row content">
+    <div class="col-sm-2 sidenav ">
+ 
+    </div>
+    <div class="col-sm-8 text-left"> 
+    <br>
+       <h1 class="text-center"><b>Login</b></h1>
+      <br>
+      <form  method="post" class="form-horizontal" id="loginform" role = "form">
+          {% csrf_token %}
+<fieldset>
+
+<!-- Form Name -->
+<!-- <form   class="form-horizontal"> -->
+<!-- <fieldset> -->
+
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="textinput">Email</label>  
+  <div class="col-md-4">
+  <input id="textinput" name="email" type="text" class="form-control input-md">
+  </div>
+</div>
+
+<!-- Password input-->
+<div class="form-group">
+  <label class="col-md-4 control-label">Password</label>
+  <div class="col-md-4">
+    <input id="passwordinput" name="password" type="password" class="form-control input-md">
+    <br>    
+<a href="/psignup">New User? Click to Register</a>
+  </div>
+</div>
+
+
+<!-- Button -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="login"></label>
+ 
+ <div class="form-group">
+         
+          <div class="col-md-4" align="center">
+              <button type="button" onclick= "studentLogin()" id="login" style="padding-left:15%;padding-right:15%;font-style" class="btn btn-info" >Login</button>
+          </div>
+        </div>
+</div>
+</fieldset>
+</form>
+
+ </div>
+ <div class="col-sm-2 sidenav">
+<!--- Side navigation data paste here-->
+<a href ="/"><button id="singlebutton" name="singlebutton" class="btn btn-primary btn-block"><b>Home</b></button></a> 
+</div>
+</div>
+</div>
+
+
+
+<script>
+
+function studentLogin() {
+        console.log('loginform');
+        var loginform = $('#' + 'loginform');
+        var csrftoken = getCookie('csrftoken');
+
+        $.ajax({
+            type: "POST",
+            url: '/login/',
+            data: loginform.serialize() + '&csrfmiddlewaretoken=' + csrftoken,
+            success: function(message) {
+            console.log(message);
+                if (message =='Success') {
+                   window.location.href = "/";
+                }
+                else
+                {
+                    alert(message);
+                }
+            },
+            error: function(xhr, errmsg, err) {
+                alert('Error');
+            },
+        });
+    }
+</script>
+</body>
+</html>
